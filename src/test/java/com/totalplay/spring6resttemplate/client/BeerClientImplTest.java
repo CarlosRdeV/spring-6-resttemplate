@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 
+import java.math.BigDecimal;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -16,7 +18,23 @@ class BeerClientImplTest {
     BeerClient beerClient;
 
     @Test
-    void getBeerById() {
+    void testCreateBeer() {
+
+        BeerDTO newDTO = BeerDTO.builder()
+                .beerName("ShCareta")
+                .beerStyle(BeerStyle.GOSE)
+                .price(new BigDecimal("100.00"))
+                .quantityOnHand(122)
+                .upc("122345")
+                .build();
+
+        BeerDTO savedDTO = beerClient.createBeer(newDTO);
+
+        assertNotNull(savedDTO);
+    }
+
+    @Test
+    void testGetBeerById() {
         Page<BeerDTO> beerDTOS = beerClient.listBeers();
 
         BeerDTO beerDTO = beerDTOS.getContent().getFirst();
@@ -27,18 +45,18 @@ class BeerClientImplTest {
     }
 
     @Test
-    void listBeers() {
+    void testListBeers() {
         beerClient.listBeers();
     }
 
     @Test
-    void listBeersByName() {
+    void testListBeersByName() {
         beerClient.listBeers("ALE", null, null,null,null);
     }
 
 
     @Test
-    void listBeersByNameAndBeerStyle() {
+    void testListBeersByNameAndBeerStyle() {
         beerClient.listBeers("ALE", BeerStyle.ALE, null,null,null);
     }
 
