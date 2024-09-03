@@ -6,17 +6,31 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.math.BigDecimal;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class BeerClientImplTest {
 
     @Autowired
     BeerClient beerClient;
+
+    @Test
+    void testDeleteById() {
+
+        Page<BeerDTO> beerDTOS = beerClient.listBeers();
+
+        BeerDTO newDTO = beerDTOS.getContent().getFirst();
+
+        beerClient.deleteBeerById(newDTO.getId());
+
+        assertThrows(HttpClientErrorException.class, () -> {
+            beerClient.getBeerById(newDTO.getId());
+        });
+    }
 
     @Test
     void testUpdateBeer() {
