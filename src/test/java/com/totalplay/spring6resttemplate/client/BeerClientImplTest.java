@@ -9,13 +9,30 @@ import org.springframework.data.domain.Page;
 
 import java.math.BigDecimal;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 class BeerClientImplTest {
 
     @Autowired
     BeerClient beerClient;
+
+    @Test
+    void testUpdateBeer() {
+
+        Page<BeerDTO> beerDTOS = beerClient.listBeers();
+
+        BeerDTO newDTO = beerDTOS.getContent().getFirst();
+
+        final String newBeerName = "New Beer Name";
+        newDTO.setBeerName(newBeerName);
+
+        BeerDTO updatedDTO = beerClient.updateBeer(newDTO);
+
+        assertEquals(newBeerName, updatedDTO.getBeerName());
+
+    }
 
     @Test
     void testCreateBeer() {
@@ -51,13 +68,13 @@ class BeerClientImplTest {
 
     @Test
     void testListBeersByName() {
-        beerClient.listBeers("ALE", null, null,null,null);
+        beerClient.listBeers("ALE", null, null, null, null);
     }
 
 
     @Test
     void testListBeersByNameAndBeerStyle() {
-        beerClient.listBeers("ALE", BeerStyle.ALE, null,null,null);
+        beerClient.listBeers("ALE", BeerStyle.ALE, null, null, null);
     }
 
 

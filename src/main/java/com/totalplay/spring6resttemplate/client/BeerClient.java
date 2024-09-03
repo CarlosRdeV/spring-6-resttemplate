@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public interface BeerClient {
 
-    Page<BeerDTO> listBeers(); ;
+    Page<BeerDTO> listBeers();
 
     Page<BeerDTO> listBeers(String beerName, BeerStyle beerStyle, Boolean showInventory, Integer pageNumber, Integer pageSize);
 
@@ -16,5 +16,6 @@ public interface BeerClient {
 
     BeerDTO createBeer(BeerDTO newDTO);
 
-    ;
+    BeerDTO updateBeer(BeerDTO newDTO);
+
 }

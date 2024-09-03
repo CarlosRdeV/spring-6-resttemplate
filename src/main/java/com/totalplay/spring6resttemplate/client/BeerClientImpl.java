@@ -24,12 +24,19 @@ public class BeerClientImpl implements BeerClient {
     private static final String GET_BEER_BY_ID_PATH = "/api/v1/beer/{beerId}";
 
     @Override
+    public BeerDTO updateBeer(BeerDTO newDTO) {
+        RestTemplate restTemplate = restTemplateBuilder.build();
+        restTemplate.put(GET_BEER_BY_ID_PATH, newDTO, newDTO.getId());
+        return getBeerById(newDTO.getId());
+    }
+
+    @Override
     public BeerDTO createBeer(BeerDTO newDTO) {
         RestTemplate restTemplate = restTemplateBuilder.build();
         //En caso de que el API devuelva en el body
         //ResponseEntity<BeerDTO> response = restTemplate.postForEntity(GET_BEER_PATH, newDTO, BeerDTO.class);
 
-       //En caso de que solo devuelva el valor en location
+        //En caso de que solo devuelva el valor en location
         URI uri = restTemplate.postForLocation(GET_BEER_PATH, newDTO);
         assert uri != null;
         return restTemplate.getForObject(uri.getPath(), BeerDTO.class);
